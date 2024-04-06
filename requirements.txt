@@ -1,0 +1,23 @@
+--extra-index-url https://pypi.tuna.tsinghua.edu.cn/simple
+--trusted-host pypi.tuna.tsinghua.edu.cn
+
+torch
+torchvision
+torchaudio
+torchsde
+einops
+transformers>=4.25.1
+safetensors>=0.3.0
+aiohttp
+accelerate
+pyyaml
+Pillow
+scipy
+tqdm
+psutil
+kornia
+websocket-client==1.6.3
+
+# ComfyUI_essentials
+numba
+
