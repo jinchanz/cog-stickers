@@ -1,23 +1,33 @@
-name: Push to Replicate
-
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      model_name:
+        required: true
+        description: "The name of the Replicate model to publish, e.g `username/modelname`. The model must already exist on Replicate."
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-
-      - name: Setup Cog
-        uses: replicate/setup-cog@v1
+      - name: Maximize build space
+        uses: AdityaGarg8/remove-unwanted-software@v3
         with:
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-large-packages: 'true'
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - name: Setup Cog
+        uses: replicate/setup-cog@support-building-cog-from-source
+        with:
+          cog-commitish: main
           token: ${{ secrets.REPLICATE_API_TOKEN }}
-          cog-version: v0.9.5
+          install-cuda: false
 
       - name: Push to Replicate
         run: |
-          cog push r8.im/jinchanz/sticker
+          cog push r8.im/${{ inputs.model_name }}
